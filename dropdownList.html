@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+        .content {
+            float: left;
+            margin-right: 10px;
+            width: 100px;
+        }
+        
+        select {
+            width: 100px;
+            height: 200px;
+            padding: 5px;
+        }
+        
+        span {
+            display: block;
+            margin: 3px 0;
+            width: 100px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 12px;
+            text-align: center;
+            background-color: #eee;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <select name="" id="select1" multiple="multiple">
+            <option value="">选项1</option>
+            <option value="">选项2</option>
+            <option value="">选项3</option>
+            <option value="">选项4</option>
+            <option value="">选项5</option>
+            <option value="">选项6</option>
+            <option value="">选项7</option>
+        </select>
+        <span class="add">选中右移>></span>
+        <span class="add-all">全部右移>></span>
+    </div>
+    <div class="content">
+        <select name="" id="select2" multiple="multiple">
+        </select>
+        <span class="remove">选中左移>></span>
+        <span class="remove-all">全部左移>></span>
+    </div>
+    <script>
+        $('.add').click(function() {
+            $('#select1 option:selected').appendTo('#select2')
+        })
+        $('.remove').click(function() {
+            $('#select2 option:selected').appendTo('#select1')
+        })
+        $('.add-all').click(function() {
+            console.log(111);
+            $('#select1').children().appendTo('#select2')
+        })
+        $('.remove-all').click(function() {
+            $('#select2').children().appendTo('#select1')
+        })
+    </script>
+</body>
+
+</html>
