@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        li {
+            list-style: none;
+        }
+        
+        i {
+            font-style: normal;
+        }
+        
+        .clearfix::after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+        }
+        
+        .select {
+            margin: 50px auto;
+            padding: 5px 10px;
+            width: 1000px;
+            height: 160px;
+            font-size: 12px;
+            background-color: #f5f5f5;
+        }
+        
+        #coat,
+        #pants,
+        #dress {
+            padding: 10px 0 5px 100px;
+            height: 24px;
+            line-height: 24px;
+            color: #666;
+            border-bottom: 1px dashed rgba(204, 204, 204, 0.3);
+        }
+        
+        .select span {
+            float: left;
+        }
+        
+        .select ul {
+            float: left;
+        }
+        
+        .select li {
+            float: left;
+            margin: 0 2px;
+            padding: 0 10px;
+            height: 24px;
+            line-height: 24px;
+            color: #003399;
+            text-align: center;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+        
+        .select li:hover {
+            color: #f60;
+            background-color: #f3edc2;
+        }
+        
+        .select ul .item-selected {
+            color: #fff;
+            background-color: #ff6600;
+        }
+        
+        .selected {
+            padding: 10px 0 5px 75px;
+            height: 24px;
+            line-height: 24px;
+            color: #666;
+            font-weight: 700;
+        }
+        
+        .selected li {
+            font-weight: 400;
+        }
+        
+        .selected ul .selected-no {
+            color: #999;
+            font-weight: 400;
+            background-color: transparent;
+        }
+        
+        .del {
+            display: inline-block;
+            margin-left: 10px;
+            width: 10px;
+        }
+        
+        .del:hover {
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="select">
+        <div id="coat" class="clearfix">
+            <span>上装：</span>
+            <ul class="clearfix">
+                <li class="select-all item-selected">全部</li>
+                <li>针织衫</li>
+                <li>毛呢外套</li>
+                <li>T恤</li>
+                <li>羽绒服</li>
+                <li>棉衣</li>
+                <li>卫衣</li>
+                <li>风衣</li>
+            </ul>
+        </div>
+        <div id="pants" class="clearfix">
+            <span>裤装：</span>
+            <ul class="clearfix">
+                <li class="select-all item-selected">全部</li>
+                <li>牛仔裤</li>
+                <li>小脚/铅笔裤</li>
+                <li>休闲裤</li>
+                <li>打底裤</li>
+                <li>羽绒服</li>
+                <li>哈伦裤</li>
+            </ul>
+        </div>
+        <div id="dress" class="clearfix">
+            <span>裙装：</span>
+            <ul class="clearfix">
+                <li class="select-all item-selected">全部</li>
+                <li>连衣裙</li>
+                <li>半身裙</li>
+                <li>长袖连衣裙</li>
+                <li>中长款连衣裙</li>
+            </ul>
+        </div>
+        <div class="selected" class="clearfix">
+            <span>已选条件：</span>
+            <ul class="clearfix">
+                <li class="selected-no">暂时没有选择过滤条件</li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        // 判断是否显示无过滤条件
+        function isshow() {
+            if ($(".selected li").length > 1) {
+                $(".selected-no").hide();
+            } else {
+                $(".selected-no").show();
+            }
+        }
+
+        // 添加至已选
+        function itemSelect(category) {
+            $("#" + category + " li").click(function() {
+                // 点击高亮
+                $(this).addClass("item-selected").siblings().removeClass("item-selected");
+                // 复制一份
+                var copyThis = $(this).clone();
+                var idName = category + "Selected"
+                var del = '<i class="del">×</i>'
+
+                // 有则替换，无则添加
+                if ($(this).hasClass("select-all")) {
+                    $("#" + idName).remove();
+                } else {
+                    if ($("#" + idName).length > 0) {
+                        $("#" + idName).html($(this).text()).append(del);
+                    } else {
+                        $(".selected ul").append(copyThis.append(del).attr("id", idName));
+                    }
+                }
+
+                // 再次点击删除，切换为全选
+                $("#" + category + "Selected").click(function() {
+                    $(this).remove();
+                    $("#" + category + " .select-all").addClass("item-selected").siblings().removeClass("item-selected");
+
+                    isshow()
+                })
+
+                isshow()
+            });
+        }
+        itemSelect("coat")
+        itemSelect("pants")
+        itemSelect("dress")
+
+
+
+
+        /*
+        // 第二种
+        function itemSelect(category) {
+            $("#" + category + " li").click(function() {
+                $(this).addClass("item-selected").siblings().removeClass("item-selected");
+                var copyThis = $(this).clone();
+                var idName = category + "Selected"
+                var del = '<i class="del">×</i>'
+                if ($(this).hasClass("select-all")) {
+                    $("#" + idName).remove();
+                } else {
+                    if ($("#" + idName).length > 0) {
+                        $("#" + idName).html($(this).text()).append(del);
+                    } else {
+                        $(".selected ul").append(copyThis.append(del).attr("id", idName));
+                    }
+                }
+            });
+        }
+
+        function delSelected(category) {
+            $(".selected").on("click", "#" + category + "Selected", function() {
+                $(this).remove();
+                $("#" + category + " .select-all").addClass("item-selected").siblings().removeClass("item-selected");
+            });
+        }
+        itemSelect("coat")
+        itemSelect("pants")
+        itemSelect("dress")
+
+        delSelected("coat")
+        delSelected("pants")
+        delSelected("dress")
+
+        $(".select,.selected").on("click", "li", function() {
+            if ($(".selected li").length > 1) {
+                $(".selected-no").hide();
+            } else {
+                $(".selected-no").show();
+            }
+        });
+        */
+
+        /* 
+        // 第三种，有bug
+        // 判断是否显示无过滤条件
+        function isshow() {
+            if ($('.selected .item-selected').length > 0) {
+                $('.selected-no').hide()
+            } else {
+                $('.selected-no').show()
+            }
+        }
+
+        $('.select li').click(function() {
+            // 点击选中添加至已选
+            var mark = $(this).parent().parent().attr('id')
+            $(this).addClass('item-selected').attr('mark', mark).siblings().removeClass('item-selected')
+            var selected = $('.select-all').siblings('.item-selected').clone().append('<i class="del">×</i>')
+
+            $('.selected .item-selected').remove()
+            selected.appendTo($('.selected ul'))
+
+            // 再次点击删除已选，并改为选中全部
+            $('.selected .item-selected').click(function() {
+                // 将对应栏改为选中全部
+                $('#' + $(this).attr('mark')).find('.select-all').addClass('item-selected').siblings().removeClass('item-selected')
+
+                $(this).remove()
+                isshow()
+            })
+
+            isshow()
+        })
+        */
+    </script>
+</body>
+
+</html>
